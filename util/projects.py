@@ -1,6 +1,12 @@
 import csv
 import os
+import re
 from config import Config
+
+# Date must be MM-YYYY or literal 'Present'
+def _validate_date(date_str: str) -> None:
+    if date_str != "Present" and not re.match(r"^(0[1-9]|1[0-2])/[0-9]{4}$", date_str):
+        raise ValueError("Date must be in MM/YYYY format or 'Present'")
 
 """CRUD operations for project entries."""
 
@@ -21,17 +27,19 @@ def get_all_projects() -> list[dict]:
         reader = csv.DictReader(csvfile)
         return list(reader)
 
-def add_project(project_name: str, start_date: str,
-                relevant_skill1: str, relevant_skill2: str, relevant_skill3: str,
-                end_date: str, description: str) -> None:
+def add_project(project_name: str, relevant_skill1: str, relevant_skill2: str, relevant_skill3: str,
+                start_date: str, end_date: str, description: str) -> None:
     """
     Adds a new project entry to the CSV.
 
-    Mandatory parameters:
-        project_name (str), start_date (str)
-    Optional parameters:
-        relevant_skill1 (str), relevant_skill2 (str), relevant_skill3 (str),
-        end_date (str), description (str)
+    Parameters:
+        project_name (str): name of the project.
+        relevant_skill1 (str): primary relevant skill.
+        relevant_skill2 (str): secondary relevant skill.
+        relevant_skill3 (str): tertiary relevant skill.
+        start_date (str): start date in MM-YYYY or 'Present'.
+        end_date (str): end date in MM-YYYY or 'Present'.
+        description (str): project description.
 
     Raises:
         FileNotFoundError: if the CSV file does not exist.
@@ -53,6 +61,9 @@ def add_project(project_name: str, start_date: str,
         "EndDate": end_date.strip(),
         "Description": description.strip(),
     }
+    # Validate date fields
+    _validate_date(row["StartDate"])
+    _validate_date(row["EndDate"])
     with open(path, "a", newline="", encoding="utf-8") as csvfile:
         fieldnames = [
             "ProjectName", "RelevantSkill1", "RelevantSkill2",
@@ -102,7 +113,11 @@ def edit_project(index: int, project_name: str = None, relevant_skill1: str = No
         if value is not None:
             if not isinstance(value, str):
                 raise ValueError(f"{key} must be a string")
-            rows[index][key] = value.strip()
+            val = value.strip()
+            # validate date fields
+            if key in ("StartDate", "EndDate"):
+                _validate_date(val)
+            rows[index][key] = val
     with open(path, "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()

@@ -1,6 +1,12 @@
 import csv
 import os
+import re
 from config import Config
+
+# Date must be MM-YYYY or literal 'Present'
+def _validate_date(date_str: str) -> None:
+    if date_str != "Present" and not re.match(r"^(0[1-9]|1[0-2])/[0-9]{4}$", date_str):
+        raise ValueError("Date must be in MM/YYYY format or 'Present'")
 
 """CRUD operations for experience entries."""
 
@@ -35,10 +41,10 @@ def add_experience(company: str, title: str, location: str, start_date: str,
         FileNotFoundError: if the CSV file does not exist.
         ValueError: if any mandatory field is empty.
     """
-    # All fields are mandatory and must be non-empty strings
-    required = [company, title, location, start_date, end_date, bullet_pt1, bullet_pt2, bullet_pt3]
+    # Validate mandatory fields: company, title, location, start_date, end_date
+    required = [company, title, location, start_date, end_date]
     if not all(isinstance(x, str) and x.strip() for x in required):
-        raise ValueError("All experience fields must be non-empty strings")
+        raise ValueError("Company, title, location, start_date, and end_date must be non-empty strings")
     path = Config.EXPERIENCE_PATH
     if not os.path.exists(path):
         raise FileNotFoundError(f"Experience file not found at {path}")
@@ -52,6 +58,9 @@ def add_experience(company: str, title: str, location: str, start_date: str,
         "BulletPt2": bullet_pt2.strip(),
         "BulletPt3": bullet_pt3.strip(),
     }
+    # Validate date fields
+    _validate_date(row["StartDate"])
+    _validate_date(row["EndDate"])
     with open(path, "a", newline="", encoding="utf-8") as csvfile:
         fieldnames = ["Company", "Title", "Location", "StartDate", "EndDate", "BulletPt1", "BulletPt2", "BulletPt3"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -98,7 +107,11 @@ def edit_experience(index: int, company: str = None, title: str = None, location
         if value is not None:
             if not isinstance(value, str):
                 raise ValueError(f"{key} must be a string")
-            rows[index][key] = value.strip()
+            val = value.strip()
+            # validate date fields
+            if key in ("StartDate", "EndDate"):
+                _validate_date(val)
+            rows[index][key] = val
     with open(path, "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
