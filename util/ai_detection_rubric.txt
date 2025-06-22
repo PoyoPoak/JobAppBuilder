@@ -1,0 +1,81 @@
+AI-Generated Writing Detection Rubric (0% = No AI Indicators, 100% = Definitely AI)
+
+1. Criterion: Repetition & Redundancy
+Description & Rationale:
+Checks for repeated ideas, phrases, or filler content. AI-generated texts often exhibit unnatural redundancy – rephrasing the same point multiple times or using verbose padding to reach length. Human writers typically self-edit to avoid needless repetition. Excess repetition suggests algorithmic generation rather than concise human communication.
+Scoring Guidelines:
+ 0 points: No undue repetition (text is concise and free of repeated points).
+ 5 points: Moderate repetition or some rephrasing of ideas without adding new content.
+ 10 points: High redundancy – ideas or sentences are restated multiple times, indicating AI-style verbosity.
+
+2. Criterion: Generic or Neutral Phrasing
+Description & Rationale:
+Assesses the use of overly generic, cliché, or “template” language. LLMs often rely on commonplace phrases and neutral statements instead of specific wording. Such neutral tonality is typical of AI text, which tends to stay near emotionally neutral territory. Human writers usually inject more context-specific phrasing or tone.
+Scoring Guidelines:
+ 0 points: Rich, specific language with context-relevant detail.
+ 5 points: Some generic phrases or clichés present (e.g., occasional use of common stock sentences).
+ 10 points: Predominantly generic wording and neutral tone throughout, suggesting formulaic AI-style prose.
+
+3. Criterion: Lack of Concrete Details
+Description & Rationale:
+Measures the presence of specific, concrete details (e.g. personal experiences, unique examples, proper nouns, dates, or domain-specific facts). AI-generated essays and letters often speak in generalities without real “lived” details or firsthand experiences. A notable absence of such details raises AI suspicion.
+Scoring Guidelines:
+ 0 points: Contains specific examples, personal anecdotes, or concrete details that anchor the content.
+ 7 points: Few specifics (mostly general statements with one or two minor details).
+ 15 points: No concrete details or personal context at all – content could apply to almost any subject.
+
+4. Criterion: Uniform Sentence & Paragraph Structure
+Description & Rationale:
+Evaluates consistency in sentence length and paragraph organization. AI text often has a highly uniform structure – similar sentence lengths and paragraph formats. Transitions may appear at the start of almost every paragraph. Very rigid structure suggests algorithmic generation.
+Scoring Guidelines:
+ 0 points: Natural structural variety (sentence and paragraph lengths vary naturally).
+ 5 points: Some uniformity in structure or length.
+ 10 points: Highly uniform structure – little to no variation; reads like a template.
+
+5. Criterion: Lexical Diversity vs. Semantic Depth
+Description & Rationale:
+Looks at vocabulary richness in relation to actual content depth. AI-generated text may use broad or sophisticated vocabulary yet feel shallow in insight. A high score here means the text sounds advanced without truly saying anything new.
+Scoring Guidelines:
+ 0 points: Language usage aligns with strong insight – terminology is appropriate and the piece offers original analysis.
+ 5 points: Some imbalance (vocabulary is varied or advanced, but content contains mostly common knowledge).
+ 10 points: Clear disparity between flashy word choice and meaningful content – text uses sophisticated words yet conveys little original thought.
+
+6. Criterion: Predictable Transitions & Formal Tone
+Description & Rationale:
+Checks for overuse of transitional phrases and an overly formal, textbook-like tone. AI text often produces structured essay-style tone with frequent transitions (“Furthermore,”, “Moreover,”). Consistently formal tone without variation suggests AI generation.
+Scoring Guidelines:
+ 0 points: Natural use of transitions and tone (varied connectors; tone fits the context).
+ 5 points: Some overuse of formulaic transitions or consistently formal tone.
+ 10 points: Very predictable flow – repetitive connectors and uniformly formal tone.
+
+7. Criterion: Hedging & Qualifying Language
+Description & Rationale:
+Detects frequent use of hedging phrases and unnecessary qualifiers. AI-generated writing often inserts stock phrases like “It is important to note that…”. Overuse of such phrases can make text feel padded or non-committal.
+Scoring Guidelines:
+ 0 points: Little to no gratuitous hedging.
+ 3 points: Some use of generic hedging phrases.
+ 5 points: Heavy reliance on canned qualifiers and hedges throughout.
+
+8. Criterion: Factual Correctness vs. Original Insight
+Description & Rationale:
+Judges balance between factual accuracy and originality of ideas. AI outputs are often factually correct on common knowledge but lack personal insight or critical analysis. A human writer typically provides a clear thesis or original perspective.
+Scoring Guidelines:
+ 0 points: Contains clear original ideas or insights beyond factual summary.
+ 7 points: Mostly factual and correct but with limited original commentary.
+ 15 points: Factually correct yet entirely unoriginal – no personal voice or argument.
+
+9. Criterion: Punctuation & Formatting Patterns
+Description & Rationale:
+Analyzes punctuation and formatting quirks. AI text often follows strict punctuation patterns – always grammatically correct and standardized. Humans might use punctuation for effect (ellipses, em dashes, exclamation marks).
+Scoring Guidelines:
+ 0 points: Punctuation usage appears natural for the genre.
+ 3 points: Minor anomalies or overly strict punctuation.
+ 5 points: Noticeable pattern in punctuation/format – too consistent or oddly applied.
+
+10. Criterion: Metadata or Unusual Artifacts (if applicable)
+Description & Rationale:
+Flags non-linguistic clues from document metadata or token patterns. Examples: AI tool metadata, lack of revision history, known watermark patterns. Strongly boosts confidence if present.
+Scoring Guidelines:
+ 0 points: No metadata anomalies detected.
+ 5 points: Some minor hints (suspicious formatting tags).
+ 10 points: Definitive metadata or token-pattern evidence of AI generation.
