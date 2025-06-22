@@ -28,8 +28,8 @@ class TestProjects(unittest.TestCase):
             "RelevantSkill3", "StartDate", "EndDate", "Description"
         ]
         rows = [
-            {"ProjectName": "Alpha", "RelevantSkill1": "Py", "RelevantSkill2": "SQL", "RelevantSkill3": "", "StartDate": "2021-01", "EndDate": "2021-06", "Description": "Alpha desc"},
-            {"ProjectName": "Beta",  "RelevantSkill1": "",   "RelevantSkill2": "",    "RelevantSkill3": "JS", "StartDate": "2022-02", "EndDate": "",      "Description": "Beta desc"},
+            {"ProjectName": "Alpha", "RelevantSkill1": "Py", "RelevantSkill2": "SQL", "RelevantSkill3": "", "StartDate": "01/2021", "EndDate": "06/2021", "Description": "Alpha desc"},
+            {"ProjectName": "Beta",  "RelevantSkill1": "",   "RelevantSkill2": "",    "RelevantSkill3": "JS", "StartDate": "02/2022", "EndDate": "Present",      "Description": "Beta desc"},
         ]
         write_csv(self.csv_path, fieldnames, rows)
         # Patch config path
@@ -47,7 +47,7 @@ class TestProjects(unittest.TestCase):
         self.assertEqual(data[0]["ProjectName"], "Alpha")
 
     def test_add_project(self):
-        projects.add_project("Gamma", "2023-05", "A", "B", "C", "2023-10", "Gamma desc")
+        projects.add_project("Gamma", "A", "B", "C", "05/2023", "10/2023", "Gamma desc")
         data = projects.get_all_projects()
         self.assertEqual(len(data), 3)
         self.assertEqual(data[-1]["ProjectName"], "Gamma")
@@ -66,9 +66,9 @@ class TestProjects(unittest.TestCase):
     def test_add_project_empty_fields(self):
         # All fields are mandatory, empty fields should raise
         with self.assertRaises(ValueError):
-            projects.add_project("", "RS1", "RS2", "RS3", "2021-01", "2021-12", "Desc")
+            projects.add_project("", "RS1", "RS2", "RS3", "01/2021", "12/2021", "Desc")
         with self.assertRaises(ValueError):
-            projects.add_project("Name", "", "RS2", "RS3", "2021-01", "2021-12", "Desc")
+            projects.add_project("Name", "", "RS2", "RS3", "01/2021", "12/2021", "Desc")
 
 class TestExperience(unittest.TestCase):
     def setUp(self):
@@ -79,8 +79,8 @@ class TestExperience(unittest.TestCase):
             "EndDate", "BulletPt1", "BulletPt2", "BulletPt3"
         ]
         rows = [
-            {"Company": "CompA", "Title": "Dev", "Location": "NY", "StartDate": "2020-01", "EndDate": "2020-12", "BulletPt1": "Did X", "BulletPt2": "",      "BulletPt3": ""},
-            {"Company": "CompB", "Title": "Eng", "Location": "SF", "StartDate": "2021-03", "EndDate": "",      "BulletPt1": "",      "BulletPt2": "Did Y", "BulletPt3": ""},
+            {"Company": "CompA", "Title": "Dev", "Location": "NY", "StartDate": "01/2020", "EndDate": "12/2020", "BulletPt1": "Did X", "BulletPt2": "",      "BulletPt3": ""},
+            {"Company": "CompB", "Title": "Eng", "Location": "SF", "StartDate": "03/2021", "EndDate": "Present",      "BulletPt1": "",      "BulletPt2": "Did Y", "BulletPt3": ""},
         ]
         write_csv(self.csv_path, fieldnames, rows)
         self.orig_path = Config.EXPERIENCE_PATH
@@ -96,7 +96,7 @@ class TestExperience(unittest.TestCase):
         self.assertEqual(data[0]["Company"], "CompA")
 
     def test_add_experience(self):
-        experience.add_experience("CompC", "Mgr", "LA", "2022-01", "2022-12", "Pt1", "Pt2", "Pt3")
+        experience.add_experience("CompC", "Mgr", "LA", "01/2022", "12/2022", "Pt1", "Pt2", "Pt3")
         data = experience.get_all_experiences()
         self.assertEqual(len(data), 3)
         self.assertEqual(data[-1]["Company"], "CompC")
@@ -115,9 +115,19 @@ class TestExperience(unittest.TestCase):
     def test_add_experience_empty_fields(self):
         # All fields are mandatory, empty fields should raise
         with self.assertRaises(ValueError):
-            experience.add_experience("", "Title", "Loc", "2020-01", "2020-12", "B1", "B2", "B3")
+            experience.add_experience("", "Title", "Loc", "01/2020", "12/2020", "B1", "B2", "B3")
         with self.assertRaises(ValueError):
-            experience.add_experience("Comp", "", "Loc", "2020-01", "2020-12", "B1", "B2", "B3")
+            experience.add_experience("Comp", "", "Loc", "01/2020", "12/2020", "B1", "B2", "B3")
+    def test_add_experience_optional_bullets(self):
+        # Bullet points are optional and may be empty
+        experience.add_experience("CompD", "Lead", "LA", "04/2021", "10/2021", "", "", "")
+        data = experience.get_all_experiences()
+        self.assertEqual(len(data), 3)
+        last = data[-1]
+        self.assertEqual(last["Company"], "CompD")
+        self.assertEqual(last["BulletPt1"], "")
+        self.assertEqual(last["BulletPt2"], "")
+        self.assertEqual(last["BulletPt3"], "")
 
 class TestSkills(unittest.TestCase):
     def setUp(self):

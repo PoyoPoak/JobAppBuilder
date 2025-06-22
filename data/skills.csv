@@ -1,1 +1,59 @@
-Skill,Category
+Python,Programming Languages
+JavaScript/TypeScript,Programming Languages
+C#/.NET,Programming Languages
+C/C++,Programming Languages
+Java,Programming Languages
+SQL,Programming Languages
+Groovy,Programming Languages
+HTML/CSS,Programming Languages
+Flask,Frameworks/Libraries
+PyTorch,Frameworks/Libraries
+RAG Systems,Frameworks/Libraries
+Model Context Protocol (MCP),Frameworks/Libraries
+Vector Databases,Frameworks/Libraries
+Express,Frameworks/Libraries
+Docker,Frameworks/Libraries
+Langchain,Frameworks/Libraries
+Word2vec,Frameworks/Libraries
+MPI,Frameworks/Libraries
+OpenMP,Frameworks/Libraries
+SIMD SSE,Frameworks/Libraries
+CUDA,Frameworks/Libraries
+OpenCL,Frameworks/Libraries
+Node.js,Platforms/Tools
+RESTful APIs,Platforms/Tools
+AWS,Platforms/Tools
+Jenkins CI,Platforms/Tools
+Playwright,Platforms/Tools
+Jupyter,Platforms/Tools
+Wandb,Platforms/Tools
+MongoDB,Platforms/Tools
+MySQL,Platforms/Tools
+UiPath,Platforms/Tools
+Power Automate,Platforms/Tools
+Postman,Platforms/Tools
+Wireshark,Platforms/Tools
+Visual Studio,Platforms/Tools
+Cognex,Platforms/Tools
+Oracle EBS,Platforms/Tools
+Pinecone,Platforms/Tools
+RPA,Platforms/Tools
+Web Applications,Platforms/Tools
+VIM,Platforms/Tools
+PythonSV,Platforms/Tools
+Agile/Waterfall,Other
+Solution Architecture,Other
+Unit Testing,Other
+Project Management,Other
+Issue Spotting,Other
+UI/UX,Other
+ERD Design,Other
+Object-Oriented,Other
+PC Hardware,Other
+Leadership,Other
+Debugging,Other
+Prompt Engineering,Other
+Text Processing,Other
+Automations,Other
+Memory Reference Code (MRC),Other
+Shell Scripting,Other
