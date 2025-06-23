@@ -4,38 +4,29 @@ from typing import Optional
 from config import Config
 from openai import OpenAI
 
-# ---------- JSON-Schema tool spec ---------- #
-DEFAULT_TOOL_SPECS = [
-    {
-        "name": "generate_resume",
-        "description": "Generate a resume based on job description and candidate data.",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "job_description": {
-                    "type": "string",
-                    "description": "Job description text"
-                },
-                "skills": {
-                    "type": "array",
-                    "items": {"type": "object"},
-                    "description": "List of skill dictionaries"
-                },
-                "experiences": {
-                    "type": "array",
-                    "items": {"type": "object"},
-                    "description": "List of experience dictionaries"
-                },
-                "projects": {
-                    "type": "array",
-                    "items": {"type": "object"},
-                    "description": "List of project dictionaries"
-                }
-            },
-            "required": ["job_description", "skills", "experiences", "projects"]
-        }
-    }
-]
+# import util modules for function dispatch
+import util.resume as resume
+import util.experience as experience
+import util.projects as projects
+import util.skills as skills
+
+# map function names to their implementations
+FUNCTION_MAP = {
+    "generate_resume": resume.generate_resume,
+    "get_all_experiences": experience.get_all_experiences,
+    "add_experience": experience.add_experience,
+    "edit_experience": experience.edit_experience,
+    "delete_experience": experience.delete_experience,
+    "get_all_projects": projects.get_all_projects,
+    "add_project": projects.add_project,
+    "edit_project": projects.edit_project,
+    "delete_project": projects.delete_project,
+    "get_all_skills": skills.get_all_skills,
+    "get_skills_by_category": skills.get_skills_by_category,
+    "add_skill": skills.add_skill,
+    "edit_skill": skills.edit_skill,
+    "delete_skill": skills.delete_skill,
+}
 
 class ChatLLM:
     """
@@ -49,10 +40,13 @@ class ChatLLM:
         self.client = client or OpenAI()
         self.standard_model = standard_model or Config.STANDARD_MODEL
         self.mini_model = mini_model or Config.MINI_MODEL
-        self.tool_specs = tool_specs if tool_specs is not None else DEFAULT_TOOL_SPECS
+        self.tool_specs = tool_specs if tool_specs is not None else Config.TOOL_SPECS
         self.prev_id = None
 
-    def chat(self, system_prompt: Optional[str] = None):
+    def chat(self, 
+             model: Optional[str] = None,
+             system_prompt: Optional[str] = None,
+             temperature: Optional[float] = None):
         print("Assistant: How can I help?")
         while True:
             try:
@@ -61,14 +55,22 @@ class ChatLLM:
                 print("\nExiting chat.")
                 break
 
-            # Generate response with system prompt and user input
-            resp = self.client.responses.create(
-                model=self.standard_model,
-                instructions=system_prompt,
-                input=[{"role": "user", "content": user_input}],
-                tools=self.tool_specs,
-                previous_response_id=self.prev_id,
-            )
+            # Prepare kwargs for the API call
+            model_name = model or self.standard_model
+            kwargs = {
+                "model": model_name,
+                "instructions": system_prompt,
+                "input": [{"role": "user", "content": user_input}],
+                "tools": self.tool_specs,
+                "previous_response_id": self.prev_id
+            }
+            
+            # Only add temperature if not using the reasoning model
+            if temperature is not None and model is not Config.REASONING_MODEL:
+                kwargs["temperature"] = temperature
+
+            # Create the response using the OpenAI client
+            resp = self.client.responses.create(**kwargs)
             
             # If tool calls are present, handle them
             follow_ups = []
@@ -76,11 +78,12 @@ class ChatLLM:
                 if item.type == "function_call":
                     fname = item.name
                     args = json.loads(item.arguments)
-                    if fname == "generate_resume":
-                        from util.resume import generate_resume
-                        result = generate_resume(**args)
-                    else:
+                    func = FUNCTION_MAP.get(fname)
+                    if not func:
                         result = {"error": f"Unknown function {fname}"}
+                    else:
+                        print(f"Calling function: {fname} with args: {args}")
+                        result = func(**args)
                     follow_ups.append({
                         "type": "function_call_output",
                         "call_id": item.call_id,
@@ -112,6 +115,8 @@ class ChatLLM:
             "instructions": system_prompt,
             "input": [{"role": "user", "content": prompt}],
         }
+        
+        # Only add temperature if not using the reasoning model
         if temperature is not None and model is not Config.REASONING_MODEL:
             kwargs["temperature"] = temperature
 

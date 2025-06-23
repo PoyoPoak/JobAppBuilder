@@ -1,30 +1,26 @@
 import os
 import time
-from typing import List, Dict, Optional
+from typing import List
 from config import Config
-from util.llm import ChatLLM
+from util.skills import get_all_skills
+from util.experience import get_all_experiences
+from util.projects import get_all_projects
 
-def generate_resume(job_description: str,
-                    skills: List[Dict[str, str]],
-                    experiences: List[Dict[str, str]],
-                    projects: List[Dict[str, str]],
-                    ) -> str:
+def generate_resume(job_description: str) -> str:
     """
     Generate a resume based on the job description and candidate data.
     Uses a template and LLM to fill in the content, then saves to a text file.
 
     Args:
         job_description: The job description text.
-        skills: List of skill dictionaries.
-        experiences: List of experience dictionaries.
-        projects: List of project dictionaries.
 
     Returns:
         Path to the generated resume file.
     """
     print("Generating resume...")
     
-    # Initialize LLM client
+    # Delay import to avoid circular dependency
+    from util.llm import ChatLLM
     bot = ChatLLM()
 
     # Load resume template
@@ -39,6 +35,11 @@ def generate_resume(job_description: str,
         to the job description. For filling out experience and projects, only use the name, \
         title, company, and dates in one line. Do not include any additional information."
     )
+    
+    # Get candidate data
+    skills: List[str] = get_all_skills()
+    experiences: List[str] = get_all_experiences()
+    projects: List[str] = get_all_projects()
     
     # Prepare the user prompt with job description, skills, experiences, projects, and template
     prompt = (
@@ -60,10 +61,14 @@ def generate_resume(job_description: str,
     job_info = bot.complete(
         prompt=job_description,
         model=Config.MINI_MODEL,
-        system_prompt="Extract the company name and job title from the job description. Only output a single string in the format \"COMPANYNAME_TITLE\" in all caps, do not respond with anything else in your output.",
+        system_prompt="Extract the company name and job title from the job description. \
+            Only output a single string in the format \"COMPANYNAME_JOBTITLE\" in all caps, do not respond with anything else in your output. \
+            Only the COMPANYNAME followed by a underscore, then the TITLE. \
+            Don't use any other punctuation. \
+            If the job title contains spaces, use a _ instead.",
         temperature=0.0
     )
-
+    
     # Determine output directory
     outdir = os.path.join(Config.CWD, 'documents')
     os.makedirs(outdir, exist_ok=True)
