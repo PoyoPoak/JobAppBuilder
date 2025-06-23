@@ -197,6 +197,3 @@ class TestSkills(unittest.TestCase):
         # Editing to invalid category should raise
         with self.assertRaises(ValueError):
             skills.edit_skill(0, category="InvalidCategory")
-
-if __name__ == "__main__":
-    unittest.main()

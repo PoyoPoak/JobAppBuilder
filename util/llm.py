@@ -82,8 +82,10 @@ class ChatLLM:
                     if not func:
                         result = {"error": f"Unknown function {fname}"}
                     else:
+                        # Invoke the function and display its result
                         print(f"Calling function: {fname} with args: {args}")
                         result = func(**args)
+                        # print(f"Function {fname} returned: {result}")
                     follow_ups.append({
                         "type": "function_call_output",
                         "call_id": item.call_id,
