@@ -9,6 +9,7 @@ import util.resume as resume
 import util.experience as experience
 import util.projects as projects
 import util.skills as skills
+import util.coverletter as coverletter
 
 # map function names to their implementations
 FUNCTION_MAP = {
@@ -26,6 +27,7 @@ FUNCTION_MAP = {
     "add_skill": skills.add_skill,
     "edit_skill": skills.edit_skill,
     "delete_skill": skills.delete_skill,
+    "create_cover_letter": coverletter.create_cover_letter,
 }
 
 class ChatLLM:
@@ -108,25 +110,39 @@ class ChatLLM:
                  prompt: str,
                  model: Optional[str] = None,
                  system_prompt: Optional[str] = None,
-                 temperature: Optional[float] = None) -> str:
+                 temperature: Optional[float] = None,
+                 schema: Optional[object] = None,
+                 ) -> str:
         """
-        Complete a prompt with optional system instructions and temperature.
+        Complete a prompt with optional system instructions, temperature, and schemas.
         """
-        kwargs = {
-            "model": model or self.standard_model,
-            "instructions": system_prompt,
-            "input": [{"role": "user", "content": prompt}],
-        }
+        # If schema is None, use the standard completion endpoint for text output
+        if schema is None:
+            kwargs = {
+                "model": model or self.standard_model,
+                "instructions": system_prompt,
+                "input": [{"role": "user", "content": prompt}],
+            }
         
-        # Only add temperature if not using the reasoning model
-        if temperature is not None and model is not Config.REASONING_MODEL:
-            kwargs["temperature"] = temperature
-
-        resp = self.client.responses.create(**kwargs)
-        return resp.output_text.strip()
-
-if __name__ == "__main__":
-    try:
-        ChatLLM().chat_loop()
-    except KeyboardInterrupt:
-        sys.exit(0)
+            # Only add temperature if not using the reasoning model
+            if temperature is not None and model is not Config.REASONING_MODEL:
+                kwargs["temperature"] = temperature
+                
+            resp = self.client.responses.create(**kwargs)
+            return resp.output_text.strip()
+        
+        # If schema is provided, use the parsing endpoint for structured output
+        if schema is not None:
+            kwargs = {
+                "model": model or self.standard_model,
+                "instructions": system_prompt,
+                "input": [{"role": "user", "content": prompt}],
+                "text_format":schema
+            }
+        
+            # Only add temperature if not using the reasoning model
+            if temperature is not None and model is not Config.REASONING_MODEL:
+                kwargs["temperature"] = temperature
+            
+            resp = self.client.responses.parse(**kwargs)
+            return resp.output_parsed

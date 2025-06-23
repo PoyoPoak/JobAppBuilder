@@ -5,12 +5,18 @@ load_dotenv()
 
 class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    
+    # Paths to data and resources
     CWD = os.getcwd()
     EXPERIENCE_PATH = os.path.join(CWD, "data", "experience.csv")
     PROJECTS_PATH = os.path.join(CWD, "data", "projects.csv")
     SKILLS_PATH = os.path.join(CWD, "data", "skills.csv")
     JOBS_PATH = os.path.join(CWD, "data", "jobs.csv")
     RESUME_TEMPLATE_PATH = os.path.join(CWD, "resources", "resume_template.txt")
+    RUBRIC_PATH = os.path.join(CWD, "resources", "ai_detection_rubric.txt")
+    DOCUMENTS_PATH = os.path.join(CWD, "documents")
+    
+    # LLM model names
     REASONING_MODEL = "o4-mini"
     STANDARD_MODEL = "gpt-4o"
     MINI_MODEL = "gpt-4.1-nano"
@@ -24,12 +30,9 @@ class Config:
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "job_description": {"type": "string", "description": "Job description text"},
-                    "skills": {"type": "array", "items": {"type": "object"}, "description": "List of skill dictionaries"},
-                    "experiences": {"type": "array", "items": {"type": "object"}, "description": "List of experience dictionaries"},
-                    "projects": {"type": "array", "items": {"type": "object"}, "description": "List of project dictionaries"}
+                    "job_description": {"type": "string", "description": "Job description text"}
                 },
-                "required": ["job_description", "skills", "experiences", "projects"]
+                "required": ["job_description"]
             }
         },
         {
@@ -193,6 +196,19 @@ class Config:
                 "type": "object",
                 "properties": {"index": {"type": "integer", "description": "Index of the skill entry to delete"}},
                 "required": ["index"]
+            }
+        },
+        {
+            "name": "create_cover_letter",
+            "description": "Orchestrate outline generation, drafting, detection, revision, and saving of cover letters.",
+            "type": "function",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "job_description": {"type": "string", "description": "Job description text"},
+                    "count": {"type": "integer", "description": "Number of cover letters to create"}
+                },
+                "required": ["job_description"]
             }
         }
     ]
