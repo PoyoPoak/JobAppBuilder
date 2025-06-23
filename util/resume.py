@@ -30,7 +30,7 @@ def generate_resume(job_description: str,
     with open(template_path, 'r', encoding='utf-8') as f:
         template = f.read()
 
-    # Prepare system prompt and user prompt
+    # Prepare system prompt to instruct the LLM
     system_prompt = (
         "You are a professional resume writer who writes resumes for software engineering. \
         Fill in the following template with the candidate's relevant information, \
@@ -49,9 +49,8 @@ def generate_resume(job_description: str,
     # Generate resume text
     resume_text = bot.complete(
         prompt=prompt,
-        model=Config.STANDARD_MODEL,
-        system_prompt=system_prompt,
-        temperature=0.2 # Adjust temperature for more creative output, higher values yield more diverse results
+        model=Config.REASONING_MODEL,
+        system_prompt=system_prompt
     )
 
     # Determine output directory

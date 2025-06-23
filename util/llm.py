@@ -4,8 +4,6 @@ from typing import Optional
 from config import Config
 from openai import OpenAI
 
-from util.resume import generate_resume
-
 # ---------- JSON-Schema tool spec ---------- #
 DEFAULT_TOOL_SPECS = [
     {
@@ -47,14 +45,14 @@ class ChatLLM:
                  client: Optional[OpenAI] = None,
                  standard_model: Optional[str] = None,
                  mini_model: Optional[str] = None,
-                 tool_specs=None):
+                 tool_specs = None):
         self.client = client or OpenAI()
         self.standard_model = standard_model or Config.STANDARD_MODEL
         self.mini_model = mini_model or Config.MINI_MODEL
         self.tool_specs = tool_specs if tool_specs is not None else DEFAULT_TOOL_SPECS
         self.prev_id = None
 
-    def chat_loop(self, system_prompt: Optional[str] = None):
+    def chat(self, system_prompt: Optional[str] = None):
         print("Assistant: How can I help?")
         while True:
             try:
@@ -63,6 +61,7 @@ class ChatLLM:
                 print("\nExiting chat.")
                 break
 
+            # Generate response with system prompt and user input
             resp = self.client.responses.create(
                 model=self.standard_model,
                 instructions=system_prompt,
@@ -70,6 +69,8 @@ class ChatLLM:
                 tools=self.tool_specs,
                 previous_response_id=self.prev_id,
             )
+            
+            # If tool calls are present, handle them
             follow_ups = []
             for item in resp.output:
                 if item.type == "function_call":
@@ -86,6 +87,7 @@ class ChatLLM:
                         "output": json.dumps(result)
                     })
 
+            # If there are follow-up function calls, create a new response to return results
             if follow_ups:
                 resp = self.client.responses.create(
                     model=self.mini_model,
@@ -93,42 +95,9 @@ class ChatLLM:
                     previous_response_id=resp.id
                 )
 
+            # Print the assistant's response
             print("Assistant:", resp.output_text.strip())
             self.prev_id = resp.id
-
-    def generate(self, prompt: str) -> str:
-        """
-        Generate a one-off response for the given prompt.
-        """
-        resp = self.client.responses.create(
-            model=self.standard_model,
-            input=[{"role": "user", "content": prompt}],
-            tools=self.tool_specs,
-        )
-        follow_ups = []
-        for item in resp.output:
-            if item.type == "function_call":
-                fname = item.name
-                args = json.loads(item.arguments)
-                if fname == "generate_resume":
-                    from util.resume import generate_resume
-                    result = generate_resume(**args)
-                else:
-                    result = {"error": f"Unknown function {fname}"}
-                follow_ups.append({
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
-                    "output": json.dumps(result)
-                })
-
-        if follow_ups:
-            resp = self.client.responses.create(
-                model=self.mini_model,
-                input=follow_ups,
-                previous_response_id=resp.id
-            )
-
-        return resp.output_text.strip()
 
     def complete(self,
                  prompt: str,
@@ -143,7 +112,7 @@ class ChatLLM:
             "instructions": system_prompt,
             "input": [{"role": "user", "content": prompt}],
         }
-        if temperature is not None:
+        if temperature is not None and model is not Config.REASONING_MODEL:
             kwargs["temperature"] = temperature
 
         resp = self.client.responses.create(**kwargs)
