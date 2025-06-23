@@ -22,6 +22,8 @@ def generate_resume(job_description: str,
     Returns:
         Path to the generated resume file.
     """
+    print("Generating resume...")
+    
     # Initialize LLM client
     bot = ChatLLM()
 
@@ -33,8 +35,9 @@ def generate_resume(job_description: str,
     # Prepare system prompt to instruct the LLM
     system_prompt = (
         "You are a professional resume writer who writes resumes for software engineering. \
-        Fill in the following template with the candidate's relevant information, \
-        tailored to the job description."
+        Fill in the following template with the candidate's relevant information, tailored \
+        to the job description. For filling out experience and projects, only use the name, \
+        title, company, and dates in one line. Do not include any additional information."
     )
     
     # Prepare the user prompt with job description, skills, experiences, projects, and template
@@ -46,17 +49,25 @@ def generate_resume(job_description: str,
         f"Resume Template:\n{template}"
     )
 
-    # Generate resume text
+    # Generate resume text 
     resume_text = bot.complete(
         prompt=prompt,
         model=Config.REASONING_MODEL,
         system_prompt=system_prompt
     )
+    
+    # Extract company and title from job description
+    job_info = bot.complete(
+        prompt=job_description,
+        model=Config.MINI_MODEL,
+        system_prompt="Extract the company name and job title from the job description. Only output a single string in the format \"COMPANYNAME_TITLE\" in all caps, do not respond with anything else in your output.",
+        temperature=0.0
+    )
 
     # Determine output directory
     outdir = os.path.join(Config.CWD, 'documents')
     os.makedirs(outdir, exist_ok=True)
-    filename = f"resume_{int(time.time())}.txt"
+    filename = f"{job_info}_RESUME_{int(time.time())}.txt"
     outpath = os.path.join(outdir, filename)
 
     # Save the resume

@@ -10,7 +10,7 @@ class Config:
     PROJECTS_PATH = os.path.join(CWD, "data", "projects.csv")
     SKILLS_PATH = os.path.join(CWD, "data", "skills.csv")
     JOBS_PATH = os.path.join(CWD, "data", "jobs.csv")
-    RESUME_TEMPLATE_PATH = os.path.join(CWD, "util", "resume_template.txt")
+    RESUME_TEMPLATE_PATH = os.path.join(CWD, "resources", "resume_template.txt")
     REASONING_MODEL = "o4-mini"
     STANDARD_MODEL = "gpt-4o"
     MINI_MODEL = "gpt-4.1-nano"
