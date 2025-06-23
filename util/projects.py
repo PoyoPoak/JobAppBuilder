@@ -23,8 +23,19 @@ def get_all_projects() -> list[dict]:
     path = Config.PROJECTS_PATH
     if not os.path.exists(path):
         raise FileNotFoundError(f"Projects file not found at {path}")
-    with open(path, newline="", encoding="utf-8") as csvfile:
-        reader = csv.DictReader(csvfile)
+    # Read CSV with or without header
+    fieldnames = [
+        "ProjectName", "RelevantSkill1", "RelevantSkill2",
+        "RelevantSkill3", "StartDate", "EndDate", "Description"
+    ]
+    with open(path, newline="", encoding="utf-8") as f:
+        # Peek first line to detect header
+        first = f.readline().strip()
+        parts = first.split(",")
+        if parts != fieldnames:
+            # No header row, rewind to start
+            f.seek(0)
+        reader = csv.DictReader(f, fieldnames=fieldnames)
         return list(reader)
 
 def add_project(project_name: str, relevant_skill1: str, relevant_skill2: str, relevant_skill3: str,

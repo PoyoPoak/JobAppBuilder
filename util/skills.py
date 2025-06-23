@@ -25,8 +25,17 @@ def get_all_skills() -> list[dict]:
     path = Config.SKILLS_PATH
     if not os.path.exists(path):
         raise FileNotFoundError(f"Skills file not found at {path}")
-    with open(path, newline="", encoding="utf-8") as csvfile:
-        reader = csv.DictReader(csvfile)
+    # Read CSV with or without header
+    fieldnames = ["Skill", "Category"]
+    with open(path, newline="", encoding="utf-8") as f:
+        # Peek first line to detect header
+        first = f.readline().strip()
+        parts = first.split(",")
+        if parts != fieldnames:
+            # No header row, rewind to start
+            f.seek(0)
+        # Use explicit fieldnames for DictReader
+        reader = csv.DictReader(f, fieldnames=fieldnames)
         return list(reader)
 
 def get_skills_by_category(category: str) -> list[dict]:
@@ -42,11 +51,18 @@ def get_skills_by_category(category: str) -> list[dict]:
     """
     if not isinstance(category, str) or not category.strip():
         raise ValueError("category must be a non-empty string")
+    # Normalize and validate category (case-insensitive)
     cat = category.strip()
-    if cat not in ALLOWED_CATEGORIES:
+    mapping = {c.lower(): c for c in ALLOWED_CATEGORIES}
+    key = cat.lower()
+    if key not in mapping:
         raise ValueError(f"category must be one of {ALLOWED_CATEGORIES}")
+    canonical = mapping[key]
+    # Filter skills by normalized category
     skills = get_all_skills()
-    return [row for row in skills if row.get("Category") == cat]
+    return [row for row in skills
+            if isinstance(row.get("Category"), str)
+               and row.get("Category").strip().lower() == key]
 
 def add_skill(skill: str, category: str) -> None:
     """

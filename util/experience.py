@@ -10,7 +10,7 @@ def _validate_date(date_str: str) -> None:
 
 """CRUD operations for experience entries."""
 
-def get_all_experiences():
+def get_all_experiences() -> list[dict]:
     """
     Retrieves all experience entries from the CSV.
 
@@ -23,8 +23,19 @@ def get_all_experiences():
     path = Config.EXPERIENCE_PATH
     if not os.path.exists(path):
         raise FileNotFoundError(f"Experience file not found at {path}")
-    with open(path, newline="", encoding="utf-8") as csvfile:
-        reader = csv.DictReader(csvfile)
+    # Read CSV with or without header
+    fieldnames = [
+        "Company", "Title", "Location", "StartDate",
+        "EndDate", "BulletPt1", "BulletPt2", "BulletPt3"
+    ]
+    with open(path, newline="", encoding="utf-8") as f:
+        # Peek first line to detect header
+        first = f.readline().strip()
+        parts = first.split(",")
+        if parts != fieldnames:
+            # No header row, rewind to start
+            f.seek(0)
+        reader = csv.DictReader(f, fieldnames=fieldnames)
         return list(reader)
 
 def add_experience(company: str, title: str, location: str, start_date: str,
