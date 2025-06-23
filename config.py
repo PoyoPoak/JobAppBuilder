@@ -25,9 +25,9 @@ class Config:
                 "type": "object",
                 "properties": {
                     "job_description": {"type": "string", "description": "Job description text"},
-                    "skills":          {"type": "array",  "items": {"type": "object"}, "description": "List of skill dictionaries"},
-                    "experiences":     {"type": "array",  "items": {"type": "object"}, "description": "List of experience dictionaries"},
-                    "projects":        {"type": "array",  "items": {"type": "object"}, "description": "List of project dictionaries"}
+                    "skills": {"type": "array", "items": {"type": "object"}, "description": "List of skill dictionaries"},
+                    "experiences": {"type": "array", "items": {"type": "object"}, "description": "List of experience dictionaries"},
+                    "projects": {"type": "array", "items": {"type": "object"}, "description": "List of project dictionaries"}
                 },
                 "required": ["job_description", "skills", "experiences", "projects"]
             }
@@ -45,16 +45,16 @@ class Config:
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "company":   {"type": "string",  "description": "Company name"},
-                    "title":     {"type": "string",  "description": "Job title"},
-                    "location":  {"type": "string",  "description": "Location"},
-                    "start_date":{"type": "string",  "description": "Start date MM/YYYY or 'Present'"},
-                    "end_date":  {"type": "string",  "description": "End date MM/YYYY or 'Present'"},
-                    "bullet_pt1":{"type": "string",  "description": "Bullet point 1"},
-                    "bullet_pt2":{"type": "string",  "description": "Bullet point 2"},
-                    "bullet_pt3":{"type": "string",  "description": "Bullet point 3"}
+                    "company": {"type": "string", "description": "Company name"},
+                    "title": {"type": "string", "description": "Job title"},
+                    "location": {"type": "string", "description": "Location"},
+                    "start_date": {"type": "string", "description": "Start date MM/YYYY or 'Present'"},
+                    "end_date": {"type": "string", "description": "End date MM/YYYY or 'Present'"},
+                    "bullet_pt1": {"type": "string", "description": "Bullet point 1"},
+                    "bullet_pt2": {"type": "string", "description": "Bullet point 2"},
+                    "bullet_pt3": {"type": "string", "description": "Bullet point 3"}
                 },
-                "required": ["company","title","location","start_date","end_date","bullet_pt1","bullet_pt2","bullet_pt3"]
+                "required": ["company", "title", "location", "start_date", "end_date", "bullet_pt1", "bullet_pt2", "bullet_pt3"]
             }
         },
         {
@@ -64,15 +64,15 @@ class Config:
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "index":     {"type": "integer", "description": "Index of the experience entry to edit"},
-                    "company":   {"type": "string",  "description": "Company name"},
-                    "title":     {"type": "string",  "description": "Job title"},
-                    "location":  {"type": "string",  "description": "Location"},
-                    "start_date":{"type": "string",  "description": "Start date MM/YYYY or 'Present'"},
-                    "end_date":  {"type": "string",  "description": "End date MM/YYYY or 'Present'"},
-                    "bullet_pt1":{"type": "string",  "description": "Bullet point 1"},
-                    "bullet_pt2":{"type": "string",  "description": "Bullet point 2"},
-                    "bullet_pt3":{"type": "string",  "description": "Bullet point 3"}
+                    "index": {"type": "integer", "description": "Index of the experience entry to edit"},
+                    "company": {"type": "string", "description": "Company name"},
+                    "title": {"type": "string", "description": "Job title"},
+                    "location": {"type": "string", "description": "Location"},
+                    "start_date": {"type": "string", "description": "Start date MM/YYYY or 'Present'"},
+                    "end_date": {"type": "string", "description": "End date MM/YYYY or 'Present'"},
+                    "bullet_pt1": {"type": "string", "description": "Bullet point 1"},
+                    "bullet_pt2": {"type": "string", "description": "Bullet point 2"},
+                    "bullet_pt3": {"type": "string", "description": "Bullet point 3"}
                 },
                 "required": ["index"]
             }
@@ -100,15 +100,15 @@ class Config:
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "project_name":    {"type": "string", "description": "Name of the project"},
+                    "project_name": {"type": "string", "description": "Name of the project"},
                     "relevant_skill1": {"type": "string", "description": "Primary relevant skill"},
                     "relevant_skill2": {"type": "string", "description": "Secondary relevant skill"},
                     "relevant_skill3": {"type": "string", "description": "Tertiary relevant skill"},
-                    "start_date":      {"type": "string", "description": "Start date MM/YYYY or 'Present'"},
-                    "end_date":        {"type": "string", "description": "End date MM/YYYY or 'Present'"},
-                    "description":     {"type": "string", "description": "Project description"}
+                    "start_date": {"type": "string", "description": "Start date MM/YYYY or 'Present'"},
+                    "end_date": {"type": "string", "description": "End date MM/YYYY or 'Present'"},
+                    "description": {"type": "string", "description": "Project description"}
                 },
-                "required": ["project_name","relevant_skill1","relevant_skill2","relevant_skill3","start_date","end_date","description"]
+                "required": ["project_name", "relevant_skill1", "relevant_skill2", "relevant_skill3", "start_date", "end_date", "description"]
             }
         },
         {
@@ -118,14 +118,14 @@ class Config:
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "index":          {"type": "integer", "description": "Index of the project entry to edit"},
-                    "project_name":   {"type": "string",  "description": "Name of the project"},
-                    "relevant_skill1":{"type": "string",  "description": "Primary relevant skill"},
-                    "relevant_skill2":{"type": "string",  "description": "Secondary relevant skill"},
-                    "relevant_skill3":{"type": "string",  "description": "Tertiary relevant skill"},
-                    "start_date":     {"type": "string",  "description": "Start date MM/YYYY or 'Present'"},
-                    "end_date":       {"type": "string",  "description": "End date MM/YYYY or 'Present'"},
-                    "description":    {"type": "string",  "description": "Project description"}
+                    "index": {"type": "integer", "description": "Index of the project entry to edit"},
+                    "project_name": {"type": "string", "description": "Name of the project"},
+                    "relevant_skill1": {"type": "string", "description": "Primary relevant skill"},
+                    "relevant_skill2": {"type": "string", "description": "Secondary relevant skill"},
+                    "relevant_skill3": {"type": "string", "description": "Tertiary relevant skill"},
+                    "start_date": {"type": "string", "description": "Start date MM/YYYY or 'Present'"},
+                    "end_date": {"type": "string", "description": "End date MM/YYYY or 'Present'"},
+                    "description": {"type": "string", "description": "Project description"}
                 },
                 "required": ["index"]
             }
@@ -134,7 +134,11 @@ class Config:
             "name": "delete_project",
             "description": "Deletes a project entry by index (0-based).",
             "type": "function",
-            "parameters": {"type": "object", "properties": {"index": {"type": "integer", "description": "Index of the project entry to delete"}}, "required": ["index"]}
+            "parameters": {
+                "type": "object",
+                "properties": {"index": {"type": "integer", "description": "Index of the project entry to delete"}},
+                "required": ["index"]
+            }
         },
         {
             "name": "get_all_skills",
@@ -144,26 +148,51 @@ class Config:
         },
         {
             "name": "get_skills_by_category",
-            "description": "Retrieves skills filtered by category.",
+            "description": "Retrieves skills filtered by category. There are only the following categories such as 'Programming Languages', 'Frameworks/Libraries', 'Platforms/Tools', 'Other'",
             "type": "function",
-            "parameters": {"type": "object", "properties": {"category": {"type": "string", "description": "Skill category to filter by"}}, "required": ["category"]}
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "category": {"type": "string", "description": "Skill category to filter by"}
+                },
+                "required": ["category"]
+            }
         },
         {
             "name": "add_skill",
-            "description": "Adds a new skill entry to the CSV.",
+            "description": "Adds a new skill entry to the CSV. The skill must be unique in its name. Categories include 'Programming Languages', 'Frameworks/Libraries', 'Platforms/Tools', 'Other'.",
             "type": "function",
-            "parameters": {"type": "object", "properties": {"skill": {"type": "string", "description": "Name of the skill"}, "category": {"type": "string", "description": "Category of the skill"}}, "required": ["skill","category"]}
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "skill": {"type": "string", "description": "Name of the skill"},
+                    "category": {"type": "string", "description": "Category of the skill"}
+                },
+                "required": ["skill", "category"]
+            }
         },
         {
             "name": "edit_skill",
-            "description": "Edits an existing skill entry by index (0-based).",
+            "description": "Edits an existing skill entry by index (0-based). The skill must be unique in its name. Categories include 'Programming Languages', 'Frameworks/Libraries', 'Platforms/Tools', 'Other'.",
             "type": "function",
-            "parameters": {"type": "object", "properties": {"index": {"type": "integer", "description": "Index of the skill entry to edit"}, "skill": {"type": "string", "description": "Name of the skill"}, "category": {"type": "string", "description": "Category of the skill"}}, "required": ["index"]}
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "index": {"type": "integer", "description": "Index of the skill entry to edit"},
+                    "skill": {"type": "string", "description": "Name of the skill"},
+                    "category": {"type": "string", "description": "Category of the skill"}
+                },
+                "required": ["index"]
+            }
         },
         {
             "name": "delete_skill",
             "description": "Deletes a skill entry by index (0-based).",
             "type": "function",
-            "parameters": {"type": "object", "properties": {"index": {"type": "integer", "description": "Index of the skill entry to delete"}}, "required": ["index"]}
+            "parameters": {
+                "type": "object",
+                "properties": {"index": {"type": "integer", "description": "Index of the skill entry to delete"}},
+                "required": ["index"]
+            }
         }
     ]
