@@ -5,6 +5,8 @@ from config import Config
 from util.skills import get_all_skills
 from util.experience import get_all_experiences
 from util.projects import get_all_projects
+from pydantic import BaseModel
+import re
 
 def generate_resume(job_description: str) -> str:
     """
@@ -58,21 +60,28 @@ def generate_resume(job_description: str) -> str:
     )
     
     # Extract company and title from job description
+    class schema(BaseModel):
+        company: str
+        job_title: str
+
+    print("Extracting job info...")
     job_info = bot.complete(
         prompt=job_description,
-        model=Config.MINI_MODEL,
         system_prompt="Extract the company name and job title from the job description. \
-            Only output a single string in the format \"COMPANYNAME_JOBTITLE\" in all caps, do not respond with anything else in your output. \
-            Only the COMPANYNAME followed by a underscore, then the TITLE. \
+            Only output a single string in all caps, do not respond with anything else in your output. \
             Don't use any other punctuation. \
-            If the job title contains spaces, use a _ instead.",
-        temperature=0.0
+            Use _ instead of spaces.",
+        model=Config.MINI_MODEL,
+        temperature=0.0,
+        schema=schema
     )
     
     # Determine output directory
     outdir = os.path.join(Config.CWD, 'documents')
     os.makedirs(outdir, exist_ok=True)
-    filename = f"{job_info}_RESUME_{int(time.time())}.txt"
+    sanitized_company = re.sub(r'[^0-9A-Za-z_]+', '_', job_info.company)
+    sanitized_job_title = re.sub(r'[^0-9A-Za-z_]+', '_', job_info.job_title)
+    filename = f"{sanitized_company}_{sanitized_job_title}_RESUME_{int(time.time())}.txt"
     outpath = os.path.join(outdir, filename)
 
     # Save the resume

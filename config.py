@@ -206,7 +206,8 @@ class Config:
                 "type": "object",
                 "properties": {
                     "job_description": {"type": "string", "description": "Job description text"},
-                    "count": {"type": "integer", "description": "Number of cover letters to create"}
+                    "count": {"type": "integer", "description": "Number of cover letters to create"},
+                    "additional_instructions": {"type": "string", "description": "Additional instructions to customize the cover letter"}
                 },
                 "required": ["job_description"]
             }

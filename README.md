@@ -1,2 +1,2 @@
 # JobAppBuilder
-For customizing my resumes, cover letters, and more.
+For customizing my resumes, cover letters, and more. Scrapped together, ain't pretty, but it works. Sometimes that's how it goes, just need something to do the job, doesn't have to be perfect. Engineering moments...
